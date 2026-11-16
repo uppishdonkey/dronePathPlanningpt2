@@ -1,17 +1,5 @@
-"""
-  1. Open drone_navigation.ttt in CoppeliaSim (simulation STOPPED).
-  2. In Terminal, from the repo folder (with your .venv activated):
-         python3 setup_environment.py
-  3. The course is built and saved to multi_drone_course.ttt.
-     drone_navigation.ttt on disk is not changed.
-
-Run this once. It expects Jake's original scene, so running it again on
-multi_drone_course.ttt would add a second copy of the course.
-
-"""
 from coppeliasim_zmqremoteapi_client import RemoteAPIClient
 import os
-
 # ==========================================
 # 1. ENVIRONMENT SETTINGS
 # ==========================================
@@ -25,7 +13,7 @@ OBSTACLE_HEIGHT = 2.0    # taller than FLIGHT_HEIGHT so LiDAR can see them
 
 BOX_SIZE = (2.0, 0.75)
 CYLINDER_DIAMETER = 1.0
-DRONE_DIAMETER = 0.4
+DRONE_DIAMETER = 0.8
 
 BOXES = [
     (-5.0, 7.5), (2.5, 5.0), (-12.5, 5.0), (12.5, 2.5), (0.0, 0.0),
@@ -97,9 +85,10 @@ def make_shape(kind, size, position, name, color, solid=True):
 
     # Solid things can be collided with and seen by sensors; markers cannot.
     if solid:
-        props = (sim.objectspecialproperty_collidable | 
-                 sim.objectspecialproperty_measurable | 
-                 sim.objectspecialproperty_detectable)
+        props = (sim.objectspecialproperty_collidable |
+                 sim.objectspecialproperty_measurable |
+                 sim.objectspecialproperty_detectable |
+                 sim.objectspecialproperty_renderable)
     else:
         props = 0
     
@@ -142,7 +131,8 @@ for number, (x, y) in TARGETS.items():
 # 6. DRONES
 # ==========================================
 size = [DRONE_DIAMETER] * 3
- 
+
+# scanner drone
 sx, sy = SCANNER_START
 make_shape("sphere", size, [sx, sy, FLIGHT_HEIGHT], "Drone", SCANNER_COLOR)
  

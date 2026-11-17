@@ -14,7 +14,7 @@ LIDAR_FREQUENCY = 5.0
 
 # the minimum and maximum distance the lidar sensor will detect
 # near clipping set to 0.3 b/c drones have diameter of 0.4 ie radius of 0.2
-NEAR_CLIPPING_PLANE = 0.5
+NEAR_CLIPPING_PLANE = 0.3
 FAR_CLIPPING_PLANE = 20.0
 
 WALL_CLEARANCE = 0.5
@@ -184,16 +184,19 @@ dt = sim.getSimulationTimeStep()
 
 try:
     for(x1, y1), (x2, y2) in zip(waypoints, waypoints[1:]):
-        # distance between two points
+        # distance between the two waypoints,
+        #   and how far the scanner drone will move in on step of the sim
         distance = math.dist((x1, y1), (x2, y2))
         distance_per_step = SCAN_SPEED * dt
 
         steps_needed = distance / distance_per_step
         whole_steps = math.ceil(steps_needed)
+
         # number of moves made by scanner
         n = max(1, whole_steps)
         
         for k in range(1, n+1):
+            # t is the difference between the two waypoints
             t = k / n
 
             dx = x2 - x1
@@ -217,7 +220,7 @@ try:
 
                 cube_numbers = np.round(points / VOXEL_SIZE).astype(np.int32)
                 unique_cubes = np.unique(cube_numbers, axis=0)
-                
+
                 for cube in unique_cubes:
                     voxels.add(tuple(cube))
 
@@ -239,8 +242,10 @@ finally:
 
 print(f"scan finished after {steps * dt:.0f} s of simulated flight.")
 
-
-
+# turn the set of cubes back into [x,y,z] positions and save them
+points = np.array(sorted(voxels), dtype=np.float64) * VOXEL_SIZE
+np.save("point_cloud.npy", points)
+print(f"saved {len(points)} points to point_cloud.npy")
 
 # # testing
 # print("waypoints:")

@@ -13,7 +13,7 @@ OBSTACLE_HEIGHT = 2.0    # taller than FLIGHT_HEIGHT so LiDAR can see them
 
 BOX_SIZE = (2.0, 0.75)
 CYLINDER_DIAMETER = 1.0
-DRONE_DIAMETER = 0.8
+DRONE_DIAMETER = 0.4
 
 BOXES = [
     (-5.0, 7.5), (2.5, 5.0), (-12.5, 5.0), (12.5, 2.5), (0.0, 0.0),

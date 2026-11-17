@@ -1,5 +1,5 @@
 import os
-
+from aliases import Position2D
 # ==========================================
 # 1. ENVIRONMENT SETTINGS
 # ==========================================
@@ -15,24 +15,24 @@ BOX_SIZE = (2.0, 0.75)
 CYLINDER_DIAMETER = 1.0
 DRONE_DIAMETER = 0.4
 
-BOXES = [
+BOXES: list[Position2D] = [
     (-5.0, 7.5), (2.5, 5.0), (-12.5, 5.0), (12.5, 2.5), (0.0, 0.0),
     (-12.5, 0.0), (-2.5, -2.5), (7.5, -2.5), (-5.0, -5.0), (15.0, -5.0),
 ]
-CYLINDERS = [
+CYLINDERS: list[Position2D] = [
     (-10.0, 5.0), (7.5, 5.0), (-2.5, 2.5), (5.0, 2.5),
     (-7.5, 0.0), (2.5, -2.5), (2.5, -7.5), (10.0, -7.5),
 ]
 
 # drone 1 -> target 1, drone 2 -> target 2, etc.
-DRONE_STARTS = {
+DRONE_STARTS: dict[int, Position2D] = {
     1: (2.5, 7.5),
     2: (15.0, 5.0),
     3: (-12.5, 7.5),
     4: (-10.0, -7.5),
     5: (12.5, -7.5),
 }
-TARGETS = {
+TARGETS: dict[int, Position2D]= {
     1: (-15.0, -7.5),
     2: (-7.5, 7.5),
     3: (5.0, -7.5),

@@ -1,6 +1,6 @@
 from environment import (MAP_WIDTH, MAP_HEIGHT, DRONE_DIAMETER, DRONE_STARTS, TARGETS,
-                        BOXES, CYLINDERS, BOX_SIZE, CYLINDER_DIAMETER, MIN_DRONE_GAP)
-from aliases import CellCoordinates   
+                        BOXES, CYLINDERS, BOX_SIZE, CYLINDER_DIAMETER, MIN_DRONE_GAP,)
+from aliases import CellCoordinates, Position2D   
 import math
 
 CELL_SIZE = 0.25
@@ -51,3 +51,17 @@ def cells_near(center: CellCoordinates) -> set[CellCoordinates]:
                 nearby.add(cell)
 
     return nearby
+
+# convert a cell's row and column to the world coordinates of its center
+    # ex. col * CELL_SIZE is the cell's left edge
+    # adding 0.5 a cell moves to its middle, and subtracting half map size
+    # moves back to world coordinates
+def cell_to_world(row: int, col: int) -> Position2D:
+    center_x = (col + 1/2) * CELL_SIZE
+    x = -MAP_WIDTH / 2 + center_x
+
+    center_y = (row + 1/2) * CELL_SIZE
+    y = -MAP_HEIGHT / 2 + center_y
+
+    return x, y
+

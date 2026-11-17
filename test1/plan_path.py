@@ -1,12 +1,17 @@
 from environment import MAP_WIDTH, MAP_HEIGHT, DRONE_DIAMETER, DRONE_STARTS, TARGETS, MIN_DRONE_GAP
-from helpers import world_to_cell, cells_near, cell_distance
-from aliases import Path, Positions, CellCoordinates, TimedCell
+from helpers import world_to_cell, cells_near, cell_distance, cell_to_world
+from aliases import CellPath, WorldPath, CellCoordinates, TimedCell
+
 import numpy as np
 import heapq as hq
+import math
+import json
 
 
 MAP_FILE = 'map.npy'
-blocked = np.load("map.npy")
+PATHS_FILE = 'paths.json'
+
+blocked = np.load(MAP_FILE)
 GRID_ROWS, GRID_COLS = blocked.shape
 print(f"loaded {MAP_FILE}: {GRID_ROWS} rows x {GRID_COLS} cols")
 
@@ -21,14 +26,10 @@ MOVES = [
     (1, 1), (1, -1), (-1, 1), (-1, -1),       # diagonals
 ]
 
-# plan all 5 drones, 1 each turn
-drone_numbers = sorted(DRONE_STARTS)
-planned_paths: list[Path] = []
-paths_in_meters: dict[int, Positions] = {}
 
 # where a planned drone is at a given tick, after path ends
 # it stays at its targetr
-def position_at(path: Path, t: int) -> CellCoordinates:
+def position_at(path: CellPath, t: int) -> CellCoordinates:
     if t < 0:
         t = 0
 
@@ -47,7 +48,7 @@ def is_free(r: int, c: int) -> bool:
 
 # 
 def tooCloseToPlannedDrones(cell: CellCoordinates, 
-                            t: int, planned_paths: list[Path]) -> bool:
+                            t: int, planned_paths: list[CellPath]) -> bool:
     # for each drone alr planned
     for p in planned_paths:
         prev_t = t - 1
@@ -68,7 +69,7 @@ def tooCloseToPlannedDrones(cell: CellCoordinates,
 
 
 def plan_drone(start: CellCoordinates, target: CellCoordinates, 
-               planned_paths: list[Path], parked_cells: set[CellCoordinates]):
+               planned_paths: list[CellPath], parked_cells: set[CellCoordinates]):
     """
     like normal A*, buy each spot in search is (r, c, time tick) instead of (r, c)
     so the search knows when the drone is in each cell.
@@ -96,9 +97,9 @@ def plan_drone(start: CellCoordinates, target: CellCoordinates,
     # starting rows and columns
     # handing back the most promising location first
     sr, sc = start
+
     # ticks so far + guess of ticks left, tick, row, col
     unexplored = [(ticks_heuristic(start), 0, sr, sc)]
-
 
     came_from: dict[TimedCell, TimedCell] = {}
     explored: set[TimedCell] = {(sr, sc, 0)} # path will be traced back at the end
@@ -109,7 +110,7 @@ def plan_drone(start: CellCoordinates, target: CellCoordinates,
 
         # reached the target, and no earlier drone needs spot later on
         if (r, c) == target and t > last_busy_t:
-            path: Path = [(r, c)]
+            path: CellPath = [(r, c)]
             spot: TimedCell = (r, c, t)
 
             while spot in came_from:
@@ -124,6 +125,7 @@ def plan_drone(start: CellCoordinates, target: CellCoordinates,
             continue
 
         for r_change, c_change in MOVES:
+
             next_r = r + r_change
             next_c = c + c_change
 
@@ -161,6 +163,12 @@ def plan_drone(start: CellCoordinates, target: CellCoordinates,
 
     return None
 
+
+# plan all 5 drones, 1 each turn
+drone_numbers = sorted(DRONE_STARTS)
+planned_paths: list[CellPath] = []
+paths_in_meters: dict[int, WorldPath] = {}
+
 for n_drone in drone_numbers:
     start = world_to_cell(*DRONE_STARTS[n_drone])
     target = world_to_cell(*TARGETS[n_drone])
@@ -185,12 +193,39 @@ for n_drone in drone_numbers:
 
     planned_paths.append(path)
 
+    # convert cells to world positions, 1/tick
+        # 1st and last are the exact start and target
+    positions: WorldPath = []
+    for r, c in path:
+
+        world_coords = cell_to_world(r, c)
+        positions.append(list(world_coords))
+
+    positions[0] = DRONE_STARTS[n_drone]
+    positions[-1] = TARGETS[n_drone]
+
+    paths_in_meters[n_drone] = positions
+
+    length = 0.0
+    for i in range(len(positions) - 1):
+        curr_pos = positions[i]
+        next_pos = positions[i + 1]
+
+        pos_distance = math.dist(curr_pos, next_pos) 
+        length += pos_distance
+
+    straight_line = math.dist(DRONE_STARTS[n_drone], TARGETS[n_drone])
+    print(f"\tpath {length:.1f} m (straight line {straight_line:.1f} m)")
+
     waits = 0
     for i in range(len(path) - 1):
         if path[i] == path[i + 1]:
             waits = waits + 1
-    print(f"   -> path found: {len(path) - 1} ticks, waited {waits} ticks")
+    print(f"\t-> path found: {len(path) - 1} ticks, waited {waits} ticks")
 
-    # convert cells to world positions, 1/tick
-        # 1st and last are the exact start and target
+with open(PATHS_FILE, "w") as f:
+    paths_dict = {}
+    for num, pos in paths_in_meters.items():
+        paths_dict[str(num)] = pos
 
+    json.dump(paths_dict, f, indent=2)

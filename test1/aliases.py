@@ -3,7 +3,7 @@
 CellCoordinates = tuple[int, int]
 TimedCell = tuple[int, int, int]  # one "spot" in the time-aware A* search
 
-Path = list[CellCoordinates]
+CellPath = list[CellCoordinates]
 
 SensorHandle = int
 LidarHandle = int
@@ -15,5 +15,6 @@ DroneHandle = int
 Position2D = tuple[float, float]
 
 Position3D = list[float] 
-Waypoints = list[list[float]]
-Positions = list[list[float]]
+Waypoints = list[Position2D]
+WorldPath = list[Position2D]
+

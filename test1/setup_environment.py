@@ -1,53 +1,10 @@
 from coppeliasim_zmqremoteapi_client import RemoteAPIClient
-import os
-# ==========================================
-# 1. ENVIRONMENT SETTINGS
-# ==========================================
-OUTPUT_SCENE = os.path.join(os.path.dirname(os.path.abspath(__file__)), 
-                            "multi_drone_course.ttt")
 
-MAP_WIDTH = 35.0
-MAP_HEIGHT = 20.0
-FLIGHT_HEIGHT = 1.0
-OBSTACLE_HEIGHT = 2.0    # taller than FLIGHT_HEIGHT so LiDAR can see them
-
-BOX_SIZE = (2.0, 0.75)
-CYLINDER_DIAMETER = 1.0
-DRONE_DIAMETER = 0.4
-
-BOXES = [
-    (-5.0, 7.5), (2.5, 5.0), (-12.5, 5.0), (12.5, 2.5), (0.0, 0.0),
-    (-12.5, 0.0), (-2.5, -2.5), (7.5, -2.5), (-5.0, -5.0), (15.0, -5.0),
-]
-CYLINDERS = [
-    (-10.0, 5.0), (7.5, 5.0), (-2.5, 2.5), (5.0, 2.5),
-    (-7.5, 0.0), (2.5, -2.5), (2.5, -7.5), (10.0, -7.5),
-]
-
-# drone 1 -> target 1, drone 2 -> target 2, etc.
-DRONE_STARTS = {
-    1: (2.5, 7.5),
-    2: (15.0, 5.0),
-    3: (-12.5, 7.5),
-    4: (-10.0, -7.5),
-    5: (12.5, -7.5),
-}
-TARGETS = {
-    1: (-15.0, -7.5),
-    2: (-7.5, 7.5),
-    3: (5.0, -7.5),
-    4: (15.0, 7.5),
-    5: (-15.0, 0.0),
-}
-
-# where original scanner drone starts for Test 1
-SCANNER_START = (-15.0, -5.0)
-
-OBSTACLE_COLOR = [1.0, 0.0, 0.0]
-FLOOR_COLOR = [1.0, 1.0, 1.0]
-TARGET_COLOR = [0, 1.0, 0]
-DRONE_COLOR = [0.0, 0.0, 0.0]
-SCANNER_COLOR = [0.0, 0.4, 1.0]
+from environment import OUTPUT_SCENE
+from environment import MAP_WIDTH, MAP_HEIGHT, FLIGHT_HEIGHT, OBSTACLE_HEIGHT
+from environment import BOXES, CYLINDERS, DRONE_STARTS, TARGETS, SCANNER_START
+from environment import OBSTACLE_COLOR, FLOOR_COLOR, TARGET_COLOR, DRONE_COLOR, SCANNER_COLOR
+from environment import BOX_SIZE, CYLINDER_DIAMETER, DRONE_DIAMETER
 
 # ==========================================
 # 2. CONNECT TO COPPELIASIM

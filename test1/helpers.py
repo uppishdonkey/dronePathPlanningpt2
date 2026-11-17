@@ -1,6 +1,6 @@
-from test1.environment import (MAP_WIDTH, MAP_HEIGHT, DRONE_DIAMETER, DRONE_STARTS, TARGETS,
-                        BOXES, CYLINDERS, BOX_SIZE, CYLINDER_DIAMETER)
-from types import CellCoordinates   
+from environment import (MAP_WIDTH, MAP_HEIGHT, DRONE_DIAMETER, DRONE_STARTS, TARGETS,
+                        BOXES, CYLINDERS, BOX_SIZE, CYLINDER_DIAMETER, MIN_DRONE_GAP)
+from aliases import CellCoordinates   
 import math
 
 CELL_SIZE = 0.25
@@ -27,3 +27,27 @@ def is_inside_grid(row: int, col: int) -> bool:
     col_check = 0 <= col < GRID_COLS
     return row_check and col_check
 
+
+def cell_distance(cell_a: CellCoordinates, cell_b: CellCoordinates) -> float:
+    dr = cell_a[0] - cell_b[0]
+    dc = cell_a[1] - cell_b[1]
+
+    return math.hypot(dr, dc) * CELL_SIZE
+
+# used for drones not planned with, returns set of close cells
+def cells_near(center: CellCoordinates) -> set[CellCoordinates]:
+    reach = math.ceil(MIN_DRONE_GAP / CELL_SIZE)
+    nearby = set()
+
+    for r_offset in range(-reach, reach+1):
+        for c_offset in range(-reach, reach+1): 
+
+            new_r = center[0] + r_offset
+            new_c = center[1] + c_offset
+
+            cell = (new_r, new_c)
+
+            if cell_distance(cell, center) < MIN_DRONE_GAP:
+                nearby.add(cell)
+
+    return nearby

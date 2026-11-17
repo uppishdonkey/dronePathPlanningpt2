@@ -48,3 +48,7 @@ FLOOR_COLOR = [1.0, 1.0, 1.0]
 TARGET_COLOR = [0, 1.0, 0]
 DRONE_COLOR = [0.0, 0.0, 0.0]
 SCANNER_COLOR = [0.0, 0.4, 1.0]
+
+# the closest two drone's centers are allowed to get
+#   1.0 - 0.4 = 0.6 gap between drone edges
+MIN_DRONE_GAP = 1.0

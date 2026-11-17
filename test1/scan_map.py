@@ -1,8 +1,8 @@
 from coppeliasim_zmqremoteapi_client import RemoteAPIClient #type: ignore
-from test1.environment import (MAP_WIDTH, MAP_HEIGHT, FLIGHT_HEIGHT, 
+from environment import (MAP_WIDTH, MAP_HEIGHT, FLIGHT_HEIGHT, 
                          OBSTACLE_HEIGHT, SCANNER_START, BOXES, CYLINDERS)
 
-from types import SensorHandle, LidarHandle, Position3D, DroneHandle
+from aliases import SensorHandle, LidarHandle, Position3D, DroneHandle
 import numpy as np
 import math
 import matplotlib.pyplot as plt

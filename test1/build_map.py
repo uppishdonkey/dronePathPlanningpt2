@@ -1,7 +1,7 @@
-from test1.environment import (MAP_WIDTH, MAP_HEIGHT, DRONE_DIAMETER, DRONE_STARTS, TARGETS,
+from environment import (MAP_WIDTH, MAP_HEIGHT, DRONE_DIAMETER, DRONE_STARTS, TARGETS,
                         BOXES, CYLINDERS, BOX_SIZE, CYLINDER_DIAMETER)
 
-from test1.helpers import world_to_cell, is_inside_grid
+from helpers import world_to_cell, is_inside_grid
 
 import numpy as np
 import math

@@ -1,5 +1,7 @@
-from environment import (MAP_WIDTH, MAP_HEIGHT, DRONE_DIAMETER, DRONE_STARTS, TARGETS,
+from test1.environment import (MAP_WIDTH, MAP_HEIGHT, DRONE_DIAMETER, DRONE_STARTS, TARGETS,
                         BOXES, CYLINDERS, BOX_SIZE, CYLINDER_DIAMETER)
+
+from test1.helpers import world_to_cell, is_inside_grid
 
 import numpy as np
 import math
@@ -14,31 +16,7 @@ FLOOR_CUTOFF = 0.2
 # set points to be counted as an obstacle
 MIN_POINTS = 5
 
-
-
 POINT_CLOUD_FILE = 'point_cloud.npy'
-
-
-CellCoordinates = tuple[int, int]  # (row, col)
-
-def world_to_cell(x: float, y: float) -> CellCoordinates:
-    """
-    the map is centered at (0, 0), so adding 1/2 the width/height shifts
-    its bottom-left corner to (0, 0). Dividing by the cell size gives
-    how many cells over (col) and up (row) the point is
-    """
-
-    # .floor() b/c we want the cell that contains the point, not the next cell over
-    # must be an int b/c np.zeros() requires int indices
-    column = math.floor((x + MAP_WIDTH / 2) / CELL_SIZE)
-    row = math.floor((y + MAP_HEIGHT / 2) / CELL_SIZE)
-
-    return row, column
-
-def is_inside_grid(row: int, col: int) -> bool:
-    row_check = 0 <= row < GRID_ROWS
-    col_check = 0 <= col < GRID_COLS
-    return row_check and col_check
 
 # load point cloud
 pts = np.load(POINT_CLOUD_FILE)
@@ -46,9 +24,6 @@ print(f'loaded {len(pts)} points from {POINT_CLOUD_FILE}')
 
 # start w/ empty grid of zeros
 point_counts = np.zeros((GRID_ROWS, GRID_COLS), dtype = int)
-
-# example1, example2 = world_to_cell(1.25, -5.70)
-# print(f'example: (1.25, -5.70) -> row {example1}, col {example2}')
 
 points_used = 0
 for x, y, z in pts:

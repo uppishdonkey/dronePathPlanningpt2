@@ -1,6 +1,8 @@
 from coppeliasim_zmqremoteapi_client import RemoteAPIClient #type: ignore
-from environment import (MAP_WIDTH, MAP_HEIGHT, FLIGHT_HEIGHT, 
+from test1.environment import (MAP_WIDTH, MAP_HEIGHT, FLIGHT_HEIGHT, 
                          OBSTACLE_HEIGHT, SCANNER_START, BOXES, CYLINDERS)
+
+from types import SensorHandle, LidarHandle, Position3D, DroneHandle
 import numpy as np
 import math
 import matplotlib.pyplot as plt
@@ -27,14 +29,6 @@ VOXEL_SIZE = 0.05
 LANE_YS = [-8.75, -3.75, 1.25, 6.25, 8.75]
 #LANE_YS = [-8.75]
 SCAN_SPEED = 1.5
-
-
-SensorHandle = int
-LidarHandle = int
-
-DroneHandle = int
-Position3D = List[float] 
-Waypoints = list[list[float]]
 
 CAMERA_SCRIPT = """
 sim = require('sim')

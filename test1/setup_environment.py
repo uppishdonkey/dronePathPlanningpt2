@@ -1,11 +1,6 @@
 from coppeliasim_zmqremoteapi_client import RemoteAPIClient
 
-from environment import OUTPUT_SCENE
-from environment import MAP_WIDTH, MAP_HEIGHT, FLIGHT_HEIGHT, OBSTACLE_HEIGHT
-from environment import BOXES, CYLINDERS, DRONE_STARTS, TARGETS, SCANNER_START
-from environment import OBSTACLE_COLOR, FLOOR_COLOR, TARGET_COLOR, DRONE_COLOR, SCANNER_COLOR
-from environment import BOX_SIZE, CYLINDER_DIAMETER, DRONE_DIAMETER
-
+from environment import *
 # ==========================================
 # 2. CONNECT TO COPPELIASIM
 # ==========================================
@@ -72,6 +67,13 @@ h = OBSTACLE_HEIGHT
 for i, (x, y) in enumerate(BOXES, start=1):
     make_shape("box", [BOX_SIZE[0], BOX_SIZE[1], h],
                [x, y, h / 2], f"Box{i}", OBSTACLE_COLOR)
+
+# for i, (x, y) in enumerate(BOXES, start=1):
+#     if (x,y) in ADDED_BOXES:
+#         color = ADDED_OBSTACLE_COLOR
+#     else:
+#         color = OBV
+
  
 d = CYLINDER_DIAMETER
 for i, (x, y) in enumerate(CYLINDERS, start=1):

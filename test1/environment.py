@@ -15,14 +15,24 @@ BOX_SIZE = (2.0, 0.75)
 CYLINDER_DIAMETER = 1.0
 DRONE_DIAMETER = 0.4
 
+# obstacles added to make the course busier (drawn in their own color)
+# ADDED_BOXES: list[Position2D] = [(-7.5, -5.0)]
+# ADDED_CYLINDERS: list[Position2D] = [(2.5, -5.0)]
+# ADDED_OBSTACLE_COLOR = [0.25, 0.25, 0.25]
+
+
 BOXES: list[Position2D] = [
     (-5.0, 7.5), (2.5, 5.0), (-12.5, 5.0), (12.5, 2.5), (0.0, 0.0),
     (-12.5, 0.0), (-2.5, -2.5), (7.5, -2.5), (-5.0, -5.0), (15.0, -5.0),
-]
+] #+ ADDED_BOXES
+
 CYLINDERS: list[Position2D] = [
     (-10.0, 5.0), (7.5, 5.0), (-2.5, 2.5), (5.0, 2.5),
     (-7.5, 0.0), (2.5, -2.5), (2.5, -7.5), (10.0, -7.5),
-]
+] #+ ADDED_CYLINDERS
+
+
+
 
 # drone 1 -> target 1, drone 2 -> target 2, etc.
 DRONE_STARTS: dict[DroneNumber, Position2D] = {

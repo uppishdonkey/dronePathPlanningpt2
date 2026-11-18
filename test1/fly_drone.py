@@ -10,7 +10,7 @@ PATHS_FILE = 'paths.json'
 
 # how long one planning tick last in seconds
 #   drone moves one 0.25 m cell per tick, 0.25 s per tick allows for 1 m/s
-TICK_SECONDS = 0.25
+TICK_SECONDS = 0.50
 
 
 client = RemoteAPIClient()

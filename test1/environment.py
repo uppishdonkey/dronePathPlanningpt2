@@ -14,6 +14,7 @@ OBSTACLE_HEIGHT = 2.0    # taller than FLIGHT_HEIGHT so LiDAR can see them
 BOX_SIZE = (2.0, 0.75)
 CYLINDER_DIAMETER = 1.0
 DRONE_DIAMETER = 0.4
+DRONE_RADIUS = DRONE_DIAMETER / 2
 
 # obstacles added to make the course busier (drawn in their own color)
 ADDED_BOXES: list[Position2D] = [(-10, -5.0)]

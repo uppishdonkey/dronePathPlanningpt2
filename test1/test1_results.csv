@@ -1,0 +1,6 @@
+drone,success,reached_target,hit_drone,hit_obstacle,path_length_m,straight_line_m,arrival_time_s,closest_drone_m,closest_obstacle_m
+1,True,True,False,False,24.51,23.05,37.0,1.75,0.74
+2,True,True,False,False,29.82,22.64,45.0,1.06,0.62
+3,True,True,False,False,29.71,23.05,45.0,1.75,0.62
+4,True,True,False,False,33.91,29.15,50.0,1.06,0.75
+5,True,True,False,False,32.34,28.5,55.0,3.54,0.62

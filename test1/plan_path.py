@@ -1,5 +1,6 @@
-from environment import MAP_WIDTH, MAP_HEIGHT, DRONE_DIAMETER, DRONE_STARTS, TARGETS, MIN_DRONE_GAP
-from helpers import world_to_cell, cells_near, cell_distance, cell_to_world
+from environment import DRONE_STARTS, TARGETS, MIN_DRONE_GAP
+from helpers import (world_to_cell, cells_near, cell_distance, cell_to_world, 
+                     tooCloseToPlannedDrones)
 from aliases import CellPath, WorldPath, CellCoordinates, TimedCell
 
 import numpy as np
@@ -27,17 +28,6 @@ MOVES = [
 ]
 
 
-# where a planned drone is at a given tick, after path ends
-# it stays at its targetr
-def position_at(path: CellPath, t: int) -> CellCoordinates:
-    if t < 0:
-        t = 0
-
-    if t >= len(path):
-        return path[-1] # return the last cell in the path (ie target)
-    
-    return path[t]
-
 def is_free(r: int, c: int) -> bool:
     r_inside = 0 <= r < GRID_ROWS
     c_inside = 0 <= c < GRID_COLS
@@ -45,28 +35,6 @@ def is_free(r: int, c: int) -> bool:
     inside = r_inside and c_inside
 
     return inside and not blocked[r, c]
-
-# 
-def tooCloseToPlannedDrones(cell: CellCoordinates, 
-                            t: int, planned_paths: list[CellPath]) -> bool:
-    # for each drone alr planned
-    for p in planned_paths:
-        prev_t = t - 1
-        next_t = t + 1
-
-        # check 3 time steps before, now, after
-        for other_t in (prev_t, t, next_t):
-
-            # where is other drone at this time
-            other_cell = position_at(p, other_t)
-
-            # if too close to drone
-            if cell_distance(cell, other_cell) < MIN_DRONE_GAP:
-                return True
-            
-    # safe distance
-    return False
-
 
 def plan_drone(start: CellCoordinates, target: CellCoordinates, 
                planned_paths: list[CellPath], parked_cells: set[CellCoordinates]):

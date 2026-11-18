@@ -1,6 +1,5 @@
-from environment import (MAP_WIDTH, MAP_HEIGHT, DRONE_DIAMETER, DRONE_STARTS, TARGETS,
-                        BOXES, CYLINDERS, BOX_SIZE, CYLINDER_DIAMETER, MIN_DRONE_GAP,)
-from aliases import CellCoordinates, Position2D   
+from environment import (MAP_WIDTH, MAP_HEIGHT, MIN_DRONE_GAP)
+from aliases import CellCoordinates, Position2D, CellPath
 import math
 
 CELL_SIZE = 0.25
@@ -65,3 +64,34 @@ def cell_to_world(row: int, col: int) -> Position2D:
 
     return x, y
 
+# where a planned drone is at a given tick, after path ends
+# it stays at its targetr
+def position_at(path: CellPath, t: int) -> CellCoordinates:
+    if t < 0:
+        t = 0
+
+    if t >= len(path):
+        return path[-1] # return the last cell in the path (ie target)
+    
+    return path[t]
+
+
+def tooCloseToPlannedDrones(cell: CellCoordinates, 
+                            t: int, planned_paths: list[CellPath]) -> bool:
+    # for each drone alr planned
+    for p in planned_paths:
+        prev_t = t - 1
+        next_t = t + 1
+
+        # check 3 time steps before, now, after
+        for other_t in (prev_t, t, next_t):
+
+            # where is other drone at this time
+            other_cell = position_at(p, other_t)
+
+            # if too close to drone
+            if cell_distance(cell, other_cell) < MIN_DRONE_GAP:
+                return True
+            
+    # safe distance
+    return False

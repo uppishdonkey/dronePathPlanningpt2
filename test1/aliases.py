@@ -8,6 +8,7 @@ CellPath = list[CellCoordinates]
 SensorHandle = int
 LidarHandle = int
 DroneHandle = int
+DroneNumber = int  
 
 # world (floats) in meters, (0,0) is center of floor
 

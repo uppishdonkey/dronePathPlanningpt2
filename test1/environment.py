@@ -1,5 +1,5 @@
 import os
-from aliases import Position2D
+from aliases import Position2D, DroneNumber
 # ==========================================
 # 1. ENVIRONMENT SETTINGS
 # ==========================================
@@ -25,14 +25,14 @@ CYLINDERS: list[Position2D] = [
 ]
 
 # drone 1 -> target 1, drone 2 -> target 2, etc.
-DRONE_STARTS: dict[int, Position2D] = {
+DRONE_STARTS: dict[DroneNumber, Position2D] = {
     1: (2.5, 7.5),
     2: (15.0, 5.0),
     3: (-12.5, 7.5),
     4: (-10.0, -7.5),
     5: (12.5, -7.5),
 }
-TARGETS: dict[int, Position2D]= {
+TARGETS: dict[DroneNumber, Position2D]= {
     1: (-15.0, -7.5),
     2: (-7.5, 7.5),
     3: (5.0, -7.5),

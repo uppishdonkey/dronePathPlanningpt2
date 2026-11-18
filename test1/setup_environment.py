@@ -65,20 +65,31 @@ make_shape("box", [MAP_WIDTH, MAP_HEIGHT, 0.1], [0, 0, -0.05], "EnvFloor", FLOOR
 
 h = OBSTACLE_HEIGHT
 for i, (x, y) in enumerate(BOXES, start=1):
-    make_shape("box", [BOX_SIZE[0], BOX_SIZE[1], h],
-               [x, y, h / 2], f"Box{i}", OBSTACLE_COLOR)
+#     make_shape("box", [BOX_SIZE[0], BOX_SIZE[1], h],
+#                [x, y, h / 2], f"Box{i}", OBSTACLE_COLOR)
+    if (x, y) in ADDED_BOXES:
+        color = ADDED_OBSTACLE_COLOR
+    else:
+        color = OBSTACLE_COLOR
 
-# for i, (x, y) in enumerate(BOXES, start=1):
-#     if (x,y) in ADDED_BOXES:
-#         color = ADDED_OBSTACLE_COLOR
-#     else:
-#         color = OBV
+    make_shape("box", [BOX_SIZE[0], BOX_SIZE[1], h],
+                [x , y , h/2], f"Box{i}", color)
+
+
 
  
 d = CYLINDER_DIAMETER
 for i, (x, y) in enumerate(CYLINDERS, start=1):
-    make_shape("cylinder", [d, d, h], [x, y, h / 2], f"Cylinder{i}", OBSTACLE_COLOR)
-  
+    # make_shape("cylinder", [d, d, h], [x, y, h / 2], f"Cylinder{i}", OBSTACLE_COLOR)
+    if (x, y) in ADDED_CYLINDERS:
+        color = ADDED_OBSTACLE_COLOR
+    else:
+        color = OBSTACLE_COLOR
+
+    make_shape("cylinder", [d, d, h], [x, y, h / 2], 
+               f"Cylinder{i}", color)
+
+
 # ==========================================
 # 5. TARGET MARKERS
 # ==========================================

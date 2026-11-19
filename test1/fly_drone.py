@@ -12,7 +12,7 @@ RESULTS_FILE = 'test1_results.csv'
 
 # how long one planning tick last in seconds
 #   drone moves one 0.25 m cell per tick, 0.25 s per tick allows for 1 m/s
-TICK_SECONDS = 0.50
+TICK_SECONDS = 0.25
 
 client = RemoteAPIClient()
 sim = client.require("sim")
@@ -215,7 +215,6 @@ for n in drone_nums:
     success = reached and not collided
 
     arrival_time = (len(path) - 1) * TICK_SECONDS
-
 
     rows.append({
         "drone": n,

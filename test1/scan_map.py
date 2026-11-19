@@ -10,7 +10,7 @@ from typing import Sequence, Dict, List
 #import os
 
 # draw the point cloud inside Coppelia as it scans
-SHOW_POINTS_IN_SCENE = True
+SHOW_POINTS_IN_SCENE = False
 # how fast the lidar spins (rotations per second) trying 5-10
 LIDAR_FREQUENCY = 5.0
 
@@ -42,9 +42,9 @@ end
 """
 
 MOVE_NOISE = 0.01
-MATCH_RANGE = 0.3
+MATCH_RANGE = 0.15
 MATCH_STEP = 0.05
-MATCH_CELL = 0.2
+MATCH_CELL = 0.1
 MATCH_EVERY = 2
 
 # connect to Coppelia

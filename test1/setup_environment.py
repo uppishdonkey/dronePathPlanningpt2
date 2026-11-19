@@ -1,15 +1,8 @@
-from coppeliasim_zmqremoteapi_client import RemoteAPIClient
-
+from sim_tools import *
 from environment import *
 # ==========================================
 # 2. CONNECT TO COPPELIASIM
 # ==========================================
-client = RemoteAPIClient()
-sim = client.require("sim")
-
-def find(name):
-    """Return the handle of an object, or -1 if it doesn't exist."""
-    return sim.getObject("/" + name, {"noError": True})
 
 for name in ("Drone", "Cylinder1", "EnvFloor"):
     if find(name) != -1:
@@ -74,9 +67,6 @@ for i, (x, y) in enumerate(BOXES, start=1):
 
     make_shape("box", [BOX_SIZE[0], BOX_SIZE[1], h],
                 [x , y , h/2], f"Box{i}", color)
-
-
-
  
 d = CYLINDER_DIAMETER
 for i, (x, y) in enumerate(CYLINDERS, start=1):

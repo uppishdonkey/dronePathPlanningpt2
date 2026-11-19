@@ -1,11 +1,10 @@
-from coppeliasim_zmqremoteapi_client import RemoteAPIClient #type: ignore
+from sim_tools import *
 from aliases import WorldPath, DroneHandle, Position3D, DroneNumber, Position2D
 from environment import *
+from helpers import *
 
 import json
 import math
-import csv
-
 
 PATHS_FILE = 'paths.json'
 RESULTS_FILE = 'test1_results.csv'
@@ -14,29 +13,8 @@ RESULTS_FILE = 'test1_results.csv'
 #   drone moves one 0.25 m cell per tick, 0.25 s per tick allows for 1 m/s
 TICK_SECONDS = 0.25
 
-client = RemoteAPIClient()
-sim = client.require("sim")
-WORLD_HANDLE = sim.handle_world
-
 with open(PATHS_FILE) as f:
     loaded = json.load(f)
-
-
-def find(name: str) -> DroneHandle:
-    """return the handle of an object, or -1 if it doesn't exist"""
-    return sim.getObject("/" + name, {"noError": True})
-
-def set_stepping(on: bool):
-    try:
-        sim.setStepping(on)
-    except Exception:
-        client.setStepping(on)
-
-def step():
-    try:
-        sim.step()
-    except Exception:
-        client.step()
 
 def position_during_t(path: WorldPath, t: int, t_progress: float) -> Position2D:
     last_t = len(path) - 1
@@ -52,41 +30,6 @@ def position_during_t(path: WorldPath, t: int, t_progress: float) -> Position2D:
     y = y1 + t_progress * (y2 - y1)
 
     return x, y
-
-
-half_l, half_w = BOX_SIZE[0] / 2, BOX_SIZE[1] / 2
-cyl_radius = CYLINDER_DIAMETER / 2
-
-def distanceToNearestObstacle(position: Position2D) -> float:
-    x, y = position
-    nearest = float("inf")
-
-    for bx, by in BOXES:
-        # dist from box center to point
-        dx = abs(x - bx)
-        dy = abs(y - by)
-
-        # how far outside the box boundary in each direction
-        outside_x = max(dx - half_l, 0)
-        outside_y = max(dy - half_w, 0)
-
-        # shortest dist to the box perimeter
-        box_dist = math.hypot(outside_x, outside_y)
-
-        nearest = min(nearest, box_dist)
-
-    for cx, cy in CYLINDERS:
-        cyl_center: Position2D = (cx, cy)
-
-        # distance from point to center
-        center_dist = math.dist(position, cyl_center)
-
-        # distance from point to cylinder surface, subtract the radius
-        cyl_dist = center_dist - cyl_radius
-
-        nearest = min(nearest, cyl_dist)
-
-    return nearest
 
 # create a dict mapping drone numbers to their paths in meters
 paths: dict[int, WorldPath] = {}
@@ -232,11 +175,8 @@ for n in drone_nums:
     print(f"drone {n}: {'SUCCESS' if success else 'FAILED'}, "
               f"{length:.1f} m in {arrival_time:.1f} s, "
               f"closest drone {closest_drone[n]:.2f} m, closest obstacle {closest_obst[n]:.2f} m")
-
-with open(RESULTS_FILE, "w", newline="") as f:
-    writer = csv.DictWriter(f, fieldnames=list(rows[0].keys()))
-    writer.writeheader()
-    writer.writerows(rows)
+    
+save_results(rows, RESULTS_FILE)
 
 successes = sum(1 for row in rows if row["success"])
 print(f"{successes} of {len(rows)} drones succeeded. "

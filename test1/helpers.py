@@ -1,4 +1,4 @@
-from environment import (MAP_WIDTH, MAP_HEIGHT, MIN_DRONE_GAP)
+from environment import *
 from aliases import CellCoordinates, Position2D, CellPath
 import math
 
@@ -95,3 +95,38 @@ def tooCloseToPlannedDrones(cell: CellCoordinates,
             
     # safe distance
     return False
+
+def distanceToNearestObstacle(position: Position2D) -> float:
+    
+    half_l, half_w = BOX_SIZE[0] / 2, BOX_SIZE[1] / 2
+    cyl_radius = CYLINDER_DIAMETER / 2
+
+    x, y = position
+    nearest = float("inf")
+
+    for bx, by in BOXES:
+        # dist from box center to point
+        dx = abs(x - bx)
+        dy = abs(y - by)
+
+        # how far outside the box boundary in each direction
+        outside_x = max(dx - half_l, 0)
+        outside_y = max(dy - half_w, 0)
+
+        # shortest dist to the box perimeter
+        box_dist = math.hypot(outside_x, outside_y)
+
+        nearest = min(nearest, box_dist)
+
+    for cx, cy in CYLINDERS:
+        cyl_center: Position2D = (cx, cy)
+
+        # distance from point to center
+        center_dist = math.dist(position, cyl_center)
+
+        # distance from point to cylinder surface, subtract the radius
+        cyl_dist = center_dist - cyl_radius
+
+        nearest = min(nearest, cyl_dist)
+
+    return nearest

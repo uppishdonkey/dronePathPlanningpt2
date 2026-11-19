@@ -32,9 +32,6 @@ CYLINDERS: list[Position2D] = [
     (-7.5, 0.0), (2.5, -2.5), (2.5, -7.5), (10.0, -7.5),
 ] + ADDED_CYLINDERS
 
-
-
-
 # drone 1 -> target 1, drone 2 -> target 2, etc.
 DRONE_STARTS: dict[DroneNumber, Position2D] = {
     1: (2.5, 7.5),

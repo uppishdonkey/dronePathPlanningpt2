@@ -1,3 +1,4 @@
+import numpy as np
 
 # grid (whole numbers) used by map and A*
 CellCoordinates = tuple[int, int]
@@ -19,3 +20,8 @@ Position3D = list[float]
 Waypoints = list[Position2D]
 WorldPath = list[Position2D]
 
+
+PointCloud = np.ndarray
+Offset2D = tuple[float, float]
+Voxel = tuple[int, int, int]
+MatchCell = tuple[int, int]

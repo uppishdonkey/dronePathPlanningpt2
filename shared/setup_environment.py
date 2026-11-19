@@ -1,5 +1,5 @@
-from sim_tools import *
-from environment import *
+from shared.sim_tools import *
+from shared.environment import *
 # ==========================================
 # 2. CONNECT TO COPPELIASIM
 # ==========================================

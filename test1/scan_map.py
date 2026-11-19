@@ -1,7 +1,8 @@
-from environment import (MAP_WIDTH, MAP_HEIGHT, FLIGHT_HEIGHT, 
+from shared.environment import (MAP_WIDTH, MAP_HEIGHT, FLIGHT_HEIGHT, 
                          OBSTACLE_HEIGHT, SCANNER_START, BOXES, CYLINDERS)
-from sim_tools import *
-from aliases import *
+from shared.sim_tools import *
+from shared.aliases import *
+from test1.files import POINT_CLOUD_FILE, SLAM_FILE
 import numpy as np
 import math
 from typing import Dict
@@ -211,12 +212,12 @@ print(f"scan finished after {steps * dt:.0f} s of simulated flight.")
 
 # turn the set of cubes back into [x,y,z] positions and save them
 points = np.array(sorted(voxels), dtype=np.float64) * VOXEL_SIZE
-np.save("point_cloud.npy", points)
-print(f"saved {len(points)} points to point_cloud.npy")
+np.save(POINT_CLOUD_FILE, points)
+print(f"saved {len(points)} points to {POINT_CLOUD_FILE}")
 
 true_path = np.array(true_path)
 estimated_path = np.array(estimated_path)
 err = np.linalg.norm(true_path - estimated_path, axis=1)
 print(f"position err: avg {err.mean():.3f} m, worst {err.max():.3f} m,")
 print(f"\tat the end {err[-1]:.3f} ")
-np.save("slam_paths.npy", np.stack([true_path, estimated_path]))
+np.save(SLAM_FILE, np.stack([true_path, estimated_path]))

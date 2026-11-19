@@ -1,5 +1,5 @@
 from coppeliasim_zmqremoteapi_client import RemoteAPIClient #type: ignore
-from aliases import *
+from shared.aliases import *
 import math
 import numpy as np
 import csv

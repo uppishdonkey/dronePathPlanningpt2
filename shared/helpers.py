@@ -1,5 +1,5 @@
-from environment import *
-from aliases import CellCoordinates, Position2D, CellPath
+from shared.environment import *
+from shared.aliases import CellCoordinates, Position2D, CellPath
 import math
 
 CELL_SIZE = 0.25

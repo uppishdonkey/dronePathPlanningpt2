@@ -9,9 +9,11 @@ import matplotlib.pyplot as plt
 from matplotlib.patches import Rectangle, Circle
 from matplotlib.lines import Line2D
 
-from environment import *
-from aliases import *
-from helpers import (CELL_SIZE, GRID_ROWS, GRID_COLS, world_to_cell,
+from shared.environment import *
+from shared.aliases import *
+from test1.files import (PLOTS_FOLDER, POINT_CLOUD_FILE, MAP_FILE, PATHS_FILE,
+                         SLAM_FILE, FLOWN_FILE)
+from shared.helpers import (CELL_SIZE, GRID_ROWS, GRID_COLS, world_to_cell,
                      is_inside_grid, distanceToNearestObstacle)
 
 # from scan_map.py
@@ -27,17 +29,10 @@ MIN_POINTS = 5
 LIDAR_RANGE = 20.0
 LIDAR_NEAR = 0.3
 LIDAR_BEAMS = 16
-LIDAR_SPREAD_DEG = 30.0      # 16 beams spread from -15 to +15 degrees
+LIDAR_SPREAD_DEG = 30.0
 
 # one simulation step (sim.getSimulationTimeStep() in scan_map.py)
 SIM_DT = 0.05
-
-PLOTS_FOLDER = "plots"
-POINT_CLOUD_FILE = "point_cloud.npy"
-MAP_FILE = "map.npy"
-PATHS_FILE = "paths.json"
-SLAM_FILE = "slam_paths.npy"
-FLOWN_FILE = "paths.json"
 
 # one color per drone
 DRONE_PLOT_COLORS: dict[DroneNumber, str] = {
@@ -142,10 +137,10 @@ def scanner_route() -> Waypoints:
 
     route: Waypoints = [SCANNER_START]
     for lane_number, y in enumerate(LANE_YS):
-        if lane_number % 2 == 0:          # lanes 0, 2, 4: left to right
+        if lane_number % 2 == 0:
             route.append((-x_turn, y))
             route.append((x_turn, y))
-        else:                             # lanes 1, 3: right to left
+        else:
             route.append((x_turn, y))
             route.append((-x_turn, y))
     return route

@@ -1,5 +1,5 @@
 import os
-from aliases import Position2D, DroneNumber
+from shared.aliases import Position2D, DroneNumber
 # ==========================================
 # 1. ENVIRONMENT SETTINGS
 # ==========================================

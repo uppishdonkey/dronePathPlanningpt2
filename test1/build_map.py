@@ -1,7 +1,8 @@
-from environment import (MAP_WIDTH, MAP_HEIGHT, DRONE_DIAMETER, DRONE_STARTS, TARGETS,
+from shared.environment import (MAP_WIDTH, MAP_HEIGHT, DRONE_DIAMETER, DRONE_STARTS, TARGETS,
                         BOXES, CYLINDERS, BOX_SIZE, CYLINDER_DIAMETER)
 
-from helpers import world_to_cell, is_inside_grid
+from shared.helpers import world_to_cell, is_inside_grid
+from test1.files import POINT_CLOUD_FILE, MAP_FILE
 
 import numpy as np
 import math
@@ -15,8 +16,6 @@ GRID_COLS = int(MAP_WIDTH / CELL_SIZE)
 FLOOR_CUTOFF = 0.2
 # set points to be counted as an obstacle
 MIN_POINTS = 5
-
-POINT_CLOUD_FILE = 'point_cloud.npy'
 
 # load point cloud
 pts = np.load(POINT_CLOUD_FILE)
@@ -113,5 +112,5 @@ for n in DRONE_STARTS:
 if all_free:
     print("no drone is blocked")
 
-np.save("map.npy", blocked)
-print("saved the map to map.npy")
+np.save(MAP_FILE, blocked)
+print(f"saved the map to {MAP_FILE}")

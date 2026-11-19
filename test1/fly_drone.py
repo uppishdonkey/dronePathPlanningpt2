@@ -1,17 +1,12 @@
-from sim_tools import *
-from aliases import WorldPath, DroneHandle, Position3D, DroneNumber, Position2D
-from environment import *
-from helpers import *
+from shared.sim_tools import *
+from shared.aliases import WorldPath, DroneHandle, Position3D, DroneNumber, Position2D
+from shared.environment import *
+from shared.helpers import *
+from test1.files import PATHS_FILE, RESULTS_FILE, PLOTS_FOLDER, FLOWN_FILE
 
 import json
 import math
 import os
-
-PATHS_FILE = 'paths.json'
-RESULTS_FILE = 'test1_results.csv'
-
-PLOTS_FOLDER = "plots"
-FLOWN_FILE = os.path.join(PLOTS_FOLDER, "flown_paths.json")
 
 # how long one planning tick last in seconds
 #   drone moves one 0.25 m cell per tick, 0.25 s per tick allows for 1 m/s

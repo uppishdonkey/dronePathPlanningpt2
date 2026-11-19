@@ -1,16 +1,14 @@
-from environment import DRONE_STARTS, TARGETS, MIN_DRONE_GAP
-from helpers import (world_to_cell, cells_near, cell_distance, cell_to_world, 
+from shared.environment import DRONE_STARTS, TARGETS, MIN_DRONE_GAP
+from shared.helpers import (world_to_cell, cells_near, cell_distance, cell_to_world, 
                      tooCloseToPlannedDrones)
-from aliases import CellPath, WorldPath, CellCoordinates, TimedCell
+from shared.aliases import CellPath, WorldPath, CellCoordinates, TimedCell
+from test1.files import MAP_FILE, PATHS_FILE
 
 import numpy as np
 import heapq as hq
 import math
 import json
 
-
-MAP_FILE = 'map.npy'
-PATHS_FILE = 'paths.json'
 
 blocked = np.load(MAP_FILE)
 GRID_ROWS, GRID_COLS = blocked.shape

@@ -5,9 +5,13 @@ from helpers import *
 
 import json
 import math
+import os
 
 PATHS_FILE = 'paths.json'
 RESULTS_FILE = 'test1_results.csv'
+
+PLOTS_FOLDER = "plots"
+FLOWN_FILE = os.path.join(PLOTS_FOLDER, "flown_paths.json")
 
 # how long one planning tick last in seconds
 #   drone moves one 0.25 m cell per tick, 0.25 s per tick allows for 1 m/s
@@ -65,8 +69,9 @@ closest_obst: dict[DroneNumber, float] = {}
 hit_drone: dict[DroneNumber, bool] = {}
 hit_obst: dict[DroneNumber, bool] = {}
 
-
+flown: dict[DroneNumber, list[Position2D]] = {}
 for n in drone_nums:
+    flown[n] = []
     # setting to infinity so any new recorded distance will be closer
     closest_drone[n] = float("inf")
     closest_obst[n] = float("inf")
@@ -98,6 +103,10 @@ try:
             curr: dict[int, Position2D] = {}
 
             for n in drone_nums:
+                
+                real_pos = sim.getObjectPosition(drones[n], WORLD_HANDLE)
+                flown[n].append((real_pos[0], real_pos[1]))
+
                 x, y = position_during_t(paths[n], t, t_progress,)
                 curr[n] = (x, y)
                 position: Position3D = [x, y, FLIGHT_HEIGHT]
@@ -182,6 +191,16 @@ successes = sum(1 for row in rows if row["success"])
 print(f"{successes} of {len(rows)} drones succeeded. "
       f"all drones arrived after {total_t * TICK_SECONDS:.1f} s.")
 print(f"saved results to {RESULTS_FILE}")
+
+os.makedirs(PLOTS_FOLDER, exist_ok=True)   # make plots/ if it isn't there yet
+flown_dict = {}
+for n in drone_nums:
+    flown_dict[str(n)] = flown[n]
+with open(FLOWN_FILE, "w") as f:
+    json.dump(flown_dict, f, indent=2)
+print(f"saved flown paths to {FLOWN_FILE}")
+
+
 
 # print("drone handles:", drones)
 # for h, p in saved_pos.items():
